@@ -23,7 +23,7 @@ class PostController extends Controller
         $posts = Post::query()
             ->where('title', 'LIKE', "%{$search}%")
             ->orWhere('body', 'LIKE', "%{$search}%")
-            ->paginate(7)
+            ->paginate(50)
             ;
     
         // Return the search view with the resluts compacted

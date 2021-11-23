@@ -69,6 +69,10 @@ Route::get('/searchHelp/', [HelpController::class,'searchHelp'])->name('searchHe
 
 Route::get('/search/', [PostController::class,'search'])->name('search');
 
+Route::get('/dasearchPost/', [DashboardPostController::class,'dasearchPost'])->name('dasearchPost')->middleware('auth');
+
+Route::get('/dasearchHelp/', [DashboardHelpController::class,'dasearchHelp'])->name('dasearchHelp')->middleware('auth');
+
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 
 Route::post('/login', [LoginController::class, 'authenticate']);

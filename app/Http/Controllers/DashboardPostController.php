@@ -77,9 +77,13 @@ class DashboardPostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit($id)
     {
-        //
+        $post = Post::find($id);
+        return view('dashboard.allposts.edit', [
+            'post'=> $post,
+            'categories'=>Category::all()
+        ]);
     }
 
     /**
@@ -89,9 +93,28 @@ class DashboardPostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
-        //
+        $post = Post::find($id);
+        $rules =[
+            'title' => 'required| max:255 | min:3',
+            'category_id' => 'required',
+            'body' => 'required'
+        ];
+
+        if($request->slug != $post->slug){
+            $rules['slug'] ='required | unique:helps';
+        }
+
+        $validatedData = $request->validate($rules);
+
+        $validatedData['user_id'] = auth()->user()->id;
+        $validatedData['excerpt'] = Str::limit(strip_tags($request->body), 150, '...');
+        
+        Post::where('id', $post->id)
+            ->update($validatedData);
+
+        return redirect('/dashboard/allposts')->with('success', 'Mantapp, Postingan berhasil diupdate');
     }
 
     /**
@@ -110,5 +133,22 @@ class DashboardPostController extends Controller
     {
         $slug = SlugService::createSlug(Post::class, 'slug', $request->title);
         return response()->json(['slug'=>$slug]);
+    }
+
+    public function dasearchPost(Request $request){
+        // Get the search value from the request
+        $search = $request->input('dasearchPost');
+    
+        // Search in the title and body columns from the posts table
+        $posts = Post::query()
+            ->where('title', 'LIKE', "%{$search}%")
+            ->orWhere('body', 'LIKE', "%{$search}%")
+            ->paginate(10)->withQueryString()
+            ;
+    
+        // Return the search view with the resluts compacted
+        return view('dashboard.allposts.index', compact('posts'),[
+            "title"=>"Posts"
+        ]);
     }
 }

@@ -23,7 +23,7 @@ class HelpController extends Controller
         $helps = Help::query()
             ->where('title', 'LIKE', "%{$searchHelp}%")
             ->orWhere('body', 'LIKE', "%{$searchHelp}%")
-            ->paginate(7)
+            ->paginate(50)
             ;
     
         // Return the search view with the resluts compacted
