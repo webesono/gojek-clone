@@ -21,7 +21,7 @@ class HelpController extends Controller
     
         // Search in the title and body columns from the helps table
         $helps = Help::query()
-            ->where('title', 'LIKE', "%{$searchHelp}%")
+            ->where('judul', 'LIKE', "%{$searchHelp}%")
             ->orWhere('body', 'LIKE', "%{$searchHelp}%")
             ->paginate(50)
             ;

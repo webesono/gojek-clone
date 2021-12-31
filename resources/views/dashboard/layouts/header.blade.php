@@ -7,7 +7,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="text-left pt-3 mb-3">
-      <a class="h2 text-white text-decoration-none" href="{{ url('/dashboard/profil') }}" style="font-weight: 1000; font-size: 100%">Welcome back, {{ auth()->user()->username }}</a>
+      <a class="h2 text-white text-decoration-none" href="{{ url('/dashboard/profile') }}" style="font-weight: 1000; font-size: 100%">Welcome back, {{ auth()->user()->username }}</a>
   </div>
     {{-- <input class="form-control form-control-dark form-control::-webkit-input-placeholder-color { color: #999;} w-100 mx-3 " style="border-radius: 25px; border:2px solid white" type="text" placeholder="Search" aria-label="Search"> --}}
     <div class="navbar-nav">

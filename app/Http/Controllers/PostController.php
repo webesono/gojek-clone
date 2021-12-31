@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Post;
 
@@ -11,7 +12,8 @@ class PostController extends Controller
     {
         return view('posts', [
             "title" => "Posts",
-            "posts" => Post::orderByDesc('id')->get()
+            "posts" => Post::orderByDesc('id')->get(),
+            "kategori" => Category::get()
         ]);
     }
 

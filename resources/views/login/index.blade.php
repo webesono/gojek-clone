@@ -1,6 +1,12 @@
 @extends('layouts.main')
 
 @section('container')
+<!-- ======= Breadcrumbs ======= -->
+<section id="breadcrumbs" class="breadcrumbs">
+  <div class="container">
+
+  </div>
+</section><!-- End Breadcrumbs -->
 
 <div class="row justify-content-center">
     <div class="col-md-5">
@@ -41,9 +47,8 @@
                 <label for="password">Password</label>
               </div>
                             
-              <button class="w-100 btn btn-lg btn-info text-white" style="font-weight:700" type="submit">Login</button>
+              <button class="w-100 btn btn-lg btn-info text-white" style="font-weight:700" type="submit">Masuk</button>
             </form>
-            <small class="d-block text-center mt-3"><a href="{{url('/tambahadmin')}}">Register Now</a></small>
         </main>
     </div>
 </div>

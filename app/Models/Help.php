@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\CategoryHelp;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Help extends Model
 {
     use HasFactory;
+    use Sluggable;
     
     //hanya id yg gk boleh diubah-ubah
     protected $guarded = ['id'];
@@ -29,8 +32,14 @@ class Help extends Model
     {
         return [
             'slug' => [
-                'source' => 'title'
+                'source' => 'judul'
             ]
         ];
     }
+//     public function uncategorized(){
+//     CategoryHelp::deleting(function ($categoryHelp){
+//         $recipe_ids = $categoryHelp->recipes->pluck('id');
+//         Recipe::whereIn('id', $recipe_ids)->update(['categoryHelp_id =>1']);
+//     });
+// }
 }

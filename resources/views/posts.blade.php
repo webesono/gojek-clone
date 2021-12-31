@@ -1,67 +1,147 @@
 @extends('layouts.main')
 
 @section('container')
-<h1 class="mb-3 text-center">{{ $title }}</h1>
 
-<div class="row justify-content-center mb-3">
-  <div class="col-md-6">
-    <form action="{{ route('search') }}"  method="GET">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Search Something?"name="search" value="{{request('search')}}" style="border-radius: 25px 0px 0px 25px" required/>
-        <button class="btn btn-info text-white" type="submit" style="border-radius: 0px 25px 25px 0px">Cari</button>
-      </div>
-    </form>
-  </div>
-</div>
+<main id="main">
 
-@if ($posts->count())
-<div class="card mb-3" style="border:1px solid lightblue; border-radius: 50px">
-    <img src="https://source.unsplash.com/1200x400?{{ $posts[0]->category->name }}" class="card-img-top" alt="{{ $posts[0]->category->name }}" style="border-radius: 50px">
+  <!-- ======= Breadcrumbs ======= -->
+  <section id="breadcrumbs" class="breadcrumbs">
+    <div class="container">
 
-    <div class="card-body text-center" >
-      <h3 class="card-title"><a href="{{url('/posts')}}/{{ $posts[0]->slug }}" class="text-decoration-none text-dark">{{ $posts[0]->title }}</a></h3>
+      <ol>
+        <li><a href="{{url('/blog')}}">Blog</a></li>
+      </ol>
+      <h2 class="mb-3">{{ $title }}</h2>
 
-        <p>
-            <small class="text-muted">
-                 By <a href="{{url('/author')}}/{{ $posts[0]->author->username }}" class="text-decoration-none">{{ $posts[0]->author->name }}</a> in <a href="{{url('/categories') }}/{{$posts[0]->category->slug}}" class="text-decoration-none">{{ $posts[0]->category->name }}</a> {{ $posts[0]->created_at->diffForHumans() }}
-            </small>
-        </p>
-      <p class="card-text">{{ $posts[0]->excerpt }}</p>
-
-      <a href="{{url('/posts')}}/{{ $posts[0]->slug }}" class="text-decoration-none btn btn-primary">Read more..</a>
-      
     </div>
-  </div>
-  
+  </section><!-- End Breadcrumbs -->
 
-  <div class="container">
-    <div class="row">
-      @foreach ($posts->skip(1) as $post)
-        <div class="col-md-4 mb-4" >
-          <div class="card"  style="border:1px solid lightblue; border-radius: 50px" href="{{url('/posts')}}/{{ $post->slug }}">
-            <div class="position-absolute p-3 py-2 " style="background-color: rgba(0, 0, 0, 0.7);   border-radius: 250px 50px 50px 50px"><a href="{{url('/categories')}}/{{ $post->category->name }}" class="text-white text-decoration-none">{{ $post->category->name }}</a></div>
-            <img src="https://source.unsplash.com/500x400?{{ $post->category->name }}" class="card-img-top" alt="{{ $post->category->name }}" style="border-radius: 50px 50px 5px 5px">
-            <div class="card-body">
+  <!-- ======= Blog Section ======= -->
+  <section id="blog" class="blog">
+    <div class="container" data-aos="fade-up">
 
-              <h5 class="card-title"> <a href="{{url('/posts')}}/{{ $post->slug }}" class="text-decoration-none text-dark">{{ $post->title }}</a></h5>
-              <p>
-                <small class="text-muted">
-                    By <a href="{{url('/author')}}/{{ $post->author->username }}" class="text-decoration-none">{{ $post->author->name }}</a>
-                    </a> {{ $post->created_at->diffForHumans() }}
-                </small>
-              </p>
-              <p class="card-text "><a href="{{url('/posts')}}/{{ $post->slug }}" class="text-decoration-none text-dark">{{ $post->excerpt }} </a><a href="{{url('/posts')}}/{{ $post->slug }} " class="text-decoration-none">Read more ...</a></p>
-              
-            </div>
-          </div>
-        </div>
-      @endforeach
-    </div>
-  </div>
-  @else
-      <p class="text-center fs-4">No post found</p>
-  @endif
-{{-- <div class="d-flex justify-content-end">
+      <div class="row">
+
+        <div class="col-lg-8 entries">
+
+          @if ($posts->count())
+          @foreach ($posts as $post)
+          <div class="position-absolute p-3 py-2 " style="background-color: rgba(0, 0, 0, 0.7);   border-radius: 250px 50px 50px 50px"><a href="{{url('/categories')}}/{{ $post->category->name }}" class="text-white text-decoration-none">{{ $post->category->name }}</a></div>
+          <article class="entry"  style="border:1px solid #18d26e; border-radius: 50px">
+            
+              <div class="card" style="border:0px; margin-top: 10px"  href="{{url('/posts')}}/{{ $post->slug }}">
+                
+                
+                @if ($post->postImage)
+                <div style="max-height: 250px; overflow:hidden">
+                    <img src="{{asset('public/storage/' . $post->postImage) }}" alt="{{ $post->category->name }}" class="img-fluid pt-3">
+                </div>
+                @else
+                <div style=" max-height: 250px; overflow:hidden">
+                  <img src="https://source.unsplash.com/500x400?{{ $post->category->name }}" class="card-img-top" alt="{{ $post->category->name }}" style="border-radius: 50px 50px 5px 5px">
+                </div>
+                @endif
+                
+               
+                <div class="card-body">
+                  <h5 class="card-title"> <a href="{{url('/posts')}}/{{ $post->slug }}" class="text-decoration-none text-dark">{{ $post->title }}</a></h5>
+                  <div class="entry-meta">
+                    <ul>
+                      <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="{{url('/author')}}/{{ $post->author->username }}">{{ $post->author->name }}</a></li>
+                      <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-single.html"> {{ $post->created_at->diffForHumans() }}</a></li>
+                    </ul>
+                  </div>
+
+                  <p class="card-text "><a href="{{url('/posts')}}/{{ $post->slug }}" class="text-decoration-none text-dark">{{ $post->excerpt }} </a></p>
+                  <div class="read-more" style="
+                    display: inline-block;
+                    background: #fff;
+                    color: #333333;
+                    padding: 6px 30px 8px 30px;
+                    transition: 0.3s;
+                    font-size: 14px;
+                    border-radius: 50px;
+                    border: 2px solid #18d26e;" >
+                    <a href="{{url('/posts')}}/{{ $post->slug }} ">Read More</a>
+                  </div>
+                </div>
+              </div>
+          </article>
+          @endforeach<!-- End blog entry -->
+          @else
+            <p class="text-center fs-4">No post found</p>
+          @endif
+          
+
+
+          {{-- <div class="d-flex justify-content-end">
   {{ $posts->links()}}
 </div> --}}
+
+          {{-- <div class="blog-pagination">
+            <ul class="justify-content-center">
+              <li><a href="#">1</a></li>
+              <li class="active"><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+            </ul>
+          </div> --}}
+
+        </div><!-- End blog entries list -->
+
+        <div class="col-lg-4">
+
+          <div class="sidebar">
+
+            <h3 class="sidebar-title">Search</h3>
+            <div class="sidebar-item search-form">
+              <form action="{{ route('search') }}"  method="GET">
+                <input type="text" class="form-control" placeholder="Search Something?"name="search" value="{{request('search')}}" style="border-radius: 25px 0px 0px 25px" required/>
+                <button type="submit"><i class="bi bi-search"></i></button>
+              </form>
+            </div><!-- End sidebar search formn-->
+
+            {{-- <h3 class="sidebar-title">Categories</h3>
+            <div class="sidebar-item categories">
+              <ul>
+                @foreach ($posts as $post)
+                <li><a href="#">{{ $post->category->name }} <span>({{ $posts->where('category_id', $post->category->id)->count() }})</span></a></li>
+                @endforeach
+              </ul>
+            </div><!-- End sidebar categories--> --}}
+
+            <h3 class="sidebar-title">Recent Posts</h3>
+            @foreach ($posts->slice(0,5) as $post)
+                <div class="sidebar-item recent-posts">
+              <div class="post-item clearfix">
+                @if ($post->postImage)
+                  <img src="{{asset('public/storage/' . $post->postImage) }}" alt="">
+                @else
+                  <img src="https://source.unsplash.com/500x400?{{ $post->category->name }}" class="card-img-top" alt="{{ $post->category->name }}">
+                @endif
+                <h4 class="card-title"> <a href="{{url('/posts')}}/{{ $post->slug }}" class="text-decoration-none text-dark">{{ $post->title }}</a></h4>
+                <time>{{ $post->created_at->diffForHumans() }}</time>
+              </div>
+            @endforeach
+
+            </div><!-- End sidebar recent posts-->
+
+          </div><!-- End sidebar -->
+
+        </div><!-- End blog sidebar -->
+
+      </div>
+
+    </div>
+    
+  </section><!-- End Blog Section -->
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+</main><!-- End #main -->
+
+
+
+
+
+
+
+
 @endsection

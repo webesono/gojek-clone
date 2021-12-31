@@ -6,13 +6,13 @@
   </div>
 
  <div class="col-lg-10" style="font-size: 12px">
-  <form method="POST" action="{{ url('/dashboard/allhelps') }}/{{ $help->id }}">
+  <form method="POST" action="{{ url('/dashboard/allhelps') }}/{{ $help->id }}" enctype="multipart/form-data">
     @method('put')
     @csrf
   <div class="mb-3">
-    <label for="title" class="form-label">Title</label>
-    <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" required autofocus value="{{ old('title', $help->title) }}">
-    @error('title')
+    <label for="judul" class="form-label">Judul</label>
+    <input type="text" class="form-control @error('judul') is-invalid @enderror" id="judul" name="judul" required autofocus value="{{ old('judul', $help->judul) }}">
+    @error('judul')
         <div class="invalid-feedback">
           {{ $message }}
         </div>
@@ -40,6 +40,24 @@
       @endforeach
     </select>
   </div>
+
+  <div class="mb-3">
+    <label for="formFile" class="form-label">Image</label>
+    <input type="hidden" name="oldhelpImage" value="{{$help->helpImage}}">
+    @if ($help->helpImage)
+    <img src="{{ asset('public/storage/' . $help->helpImage ) }}" class="img-preview img-fluid mb-3 col-sm-5 d-block">
+    @else
+      <img class="img-preview img-fluid mb-3 col-sm-5">
+    @endif
+    <img class="img-preview img-fluid mb-3 col-sm-5">
+    <input class="form-control @error('helpImage') is-invalid @enderror" type="file" id="helpImage" name="helpImage" onchange="previewImage()">
+    @error('helpImage')
+    <div class="invalid-feedback">
+      {{ $message }}
+    </div>
+    @enderror
+  </div>
+
   <div class="mb-3">
     <label for="body" class="form-label">Body</label>
     @error('body')
@@ -53,14 +71,15 @@
 </form>
  </div>
 
+
   {{-- jQuery Script --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 {{-- Check Slug --}}
 
 <script>
-  $('#title').keyup(function(e) {
-       $.get('{{ url('check_slug') }}', 
-       { 'title': $(this).val() }, 
+  $('#judul').keyup(function(e) {
+       $.get('{{ url('check_slug3') }}', 
+       { 'judul': $(this).val() }, 
        function( data ) {
            $('#slug').val(data.slug);
        }
@@ -70,6 +89,20 @@
     document.addEventListener("trix-file-accept", event => {
   event.preventDefault()
 })
+
+function previewImage(){
+  const helpImage= document.querySelector('#helpImage');
+  const imgPreview = document.querySelector('.img-preview');
+
+  imgPreview.style.display = 'block';
+
+  const oFReader = new FileReader();
+  oFReader.readAsDataURL(helpImage.files[0]);
+
+  oFReader.onload = function(oFREvent){
+    imgPreview.src = oFREvent.target.result;
+  }
+}
 </script>
 
 @endsection

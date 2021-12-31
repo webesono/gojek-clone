@@ -16,8 +16,9 @@ class CreateHelpsTable extends Migration
         Schema::create('helps', function (Blueprint $table) {
             $table->id();
             $table->foreignId('categoryHelp_id');
-            $table->string('title');
+            $table->string('judul');
             $table->string('slug')->unique();
+            $table->string('helpImage')->nullable();
             $table->text('excerpt');
             $table->text('body');
             $table->timestamp('publish_at')->nullable();

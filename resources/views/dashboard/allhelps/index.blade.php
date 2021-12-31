@@ -22,7 +22,7 @@
         <thead>
             <tr>
               <th scope="col">No.</th>
-              <th scope="col">Title</th>
+              <th scope="col">judul</th>
               <th scope="col">Category</th>
               <th scope="col">Action</th>
             </tr>
@@ -31,12 +31,12 @@
         @foreach ($helps as $help)
         <tr>
             <td>{{ $loop->iteration }}</td>
-            <td>{{ $help->title }}</td>
+            <td>{{ $help->judul }}</td>
             <td>{{ $help->categoryHelp->name }}</td>
             <td>
                 <a href="{{ url('/dashboard/allhelps')}}/{{ $help->id }}" class="badge bg-info"><span data-feather="eye"></span></a>
                 <a href="{{ url('/dashboard/allhelps')}}/{{ $help->id }}/edit" class="badge bg-warning"><span data-feather="edit"></span></a>
-                <form class="d-inline" action="{{ url('/dashboard/allposts')}}/{{ $help->id }}" method="POST" col-lg-11>
+                <form class="d-inline" action="{{ url('/dashboard/allhelps')}}/{{ $help->id }}" method="POST" col-lg-11>
                   @method('delete')
                   @csrf
                   <button class="badge bg-danger border-0" onclick="return confirm('Yakin nih mau hapus data?')"><span data-feather="x-circle"></span></button>

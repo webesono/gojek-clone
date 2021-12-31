@@ -2,11 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Help;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Leader;
+use App\Models\Product;
 use App\Models\Category;
 use App\Models\CategoryHelp;
-use App\Models\Help;
 use Illuminate\Database\Seeder;
 
 
@@ -19,9 +21,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        
-
-        User::factory(3)->create();
+       
+        User::create([
+            'name' => 'SuperAdmin',
+            'username'=> 'superadmin',
+            'email' => 'admin@gmail.com',
+            'password'=> bcrypt('password'),
+            'status' => 1,
+            'photo' => 'photo/TxF64E1qzKBUUCo9LnQI80b6RUbKCCFuF54KPKRL.png'
+        ]);
 
         Category::create([
             'name' => 'Produk',
@@ -36,11 +44,11 @@ class DatabaseSeeder extends Seeder
             'slug' => 'pembayaran'
         ]);
 
-        Post::factory(20)->create();
+        Post::factory(8)->create();
 
         CategoryHelp::create([
-            'name' => 'Feature',
-            'slug' => 'feature'
+            'name' => 'fitur',
+            'slug' => 'fitur'
         ]);
         CategoryHelp::create([
             'name' => 'Aplication',
@@ -51,18 +59,22 @@ class DatabaseSeeder extends Seeder
             'slug' => 'payment'
         ]);
 
-        Help::factory(20)->create();
+        Help::factory(8)->create();
 
-        // User::create([
-        //     'name' => 'Arif Yudha Wibisono',
-        //     'email' => 'arifyudhawibisono@gmail.com',
-        //     'password'=> bcrypt('12345')
-        // ]);
-        // User::create([
-        //     'name' => 'Hankodes',
-        //     'email' => 'kodes@gmail.com',
-        //     'password'=> bcrypt('12345')
-        // ]);
+        Product::create([
+            'name' => 'Glontor',
+            'productImage' =>'product-images/scooter.jpg',
+            'excerpt' => 'Glontor, adalah singkatan dari Glone Motor yang merupakan produk jasa pertama dari kami.',
+            'body' =>'<p>Glontor, adalah singkatan dari Glone Motor yang merupakan produk jasa pertama dari kami. Glontor merupakan jasa transportasi menggunakan sepeda motor<p>'
+        ]);
+        Product::create([
+            'name' => 'Glocar',
+            'productImage' =>'product-images/car.jpg',
+            'excerpt' => 'Glocar, merupakan produk jasa kedua dari kami.',
+            'body' =>'<p>Glocar, merupakan produk jasa kedua dari kami Glocar merupakan jasa transportasi menggunakan mobil<p>'
+        ]);
+
+        Leader::factory(5)->create();
 
     }
 }

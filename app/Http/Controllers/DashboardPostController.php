@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardPostController extends Controller
 {
@@ -46,8 +47,13 @@ class DashboardPostController extends Controller
             'title' => 'required| max:255 | min:3',
             'slug' => 'required | unique:posts',
             'category_id' => 'required',
+            'postImage' => 'image | file | max: 1024',
             'body' => 'required'
         ]);
+
+        if($request->file('postImage')){
+            $validatedData['postImage'] =$request->file('postImage')-> store('post-images');
+        }
 
         $validatedData['user_id'] = auth()->user()->id;
         $validatedData['excerpt'] = Str::limit(strip_tags($request->body), 150, '...');
@@ -99,6 +105,7 @@ class DashboardPostController extends Controller
         $rules =[
             'title' => 'required| max:255 | min:3',
             'category_id' => 'required',
+            'postImage' => 'image | file | max: 1024',
             'body' => 'required'
         ];
 
@@ -107,6 +114,13 @@ class DashboardPostController extends Controller
         }
 
         $validatedData = $request->validate($rules);
+
+        if($request->file('postImage')){
+            if($request->oldpostImage){
+                Storage::delete($request->oldpostImage);
+            }
+            $validatedData['postImage'] =$request->file('postImage')-> store('post-images');
+        }
 
         $validatedData['user_id'] = auth()->user()->id;
         $validatedData['excerpt'] = Str::limit(strip_tags($request->body), 150, '...');
@@ -125,6 +139,10 @@ class DashboardPostController extends Controller
      */
     public function destroy($id)
     {
+        $post = Post::find($id);
+        if($post->postImage){
+            Storage::delete($post->postImage);
+        }
         Post::destroy($id);
         return redirect('/dashboard/allposts')->with('success', 'Data yang dipilih berhasil dihapus');
     }
